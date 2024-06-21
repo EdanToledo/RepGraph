@@ -255,6 +255,33 @@ export const Node = ({
         }
     };
 
+    let mouseStartX, mouseStartY, ElementStartX, ElementStartY;
+    const onMouseDown = (event) => {
+        mouseStartX = event.clientX;
+        mouseStartY = event.clientY;
+        ElementStartX = node.x;
+        ElementStartY = node.y;
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onMouseUp);
+    };
+
+    const onMouseUp = (event) => {
+        // document.getElementById(`dot${link.id}`).style.visibility = "hidden";
+        document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("mousemove", onMove);
+    };
+
+    const onMove = (event) => {
+        let changeX = mouseStartX - event.clientX;
+        let changeY = mouseStartY - event.clientY;
+        let numLevelx = Math.round(changeX / 90);
+        let numLevely = Math.round(changeY / 100);
+        node.x = ElementStartX - numLevelx * 90;
+        node.y = ElementStartY - numLevely * 100;
+        setHighlighted(true);
+        setHighlighted(false);
+    };
+
     let notAllowed = [
         "x",
         "y",
@@ -331,6 +358,7 @@ export const Node = ({
                 onMouseOver={handleMouseOver}
                 onMouseOut={hideTooltip}
                 onClick={handleOnClick}
+                onMouseDown={onMouseDown}
                 top={node.y}
                 left={node.x}
             >
